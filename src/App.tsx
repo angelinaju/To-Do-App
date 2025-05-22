@@ -11,18 +11,14 @@ type Todos = {
   text: string, 
   completed: boolean,
   date: Date;
+  notes?: string, 
 }
 
 function App() {
 
-  const [input, setInput] = useState<string>("");
+  const [input, setInput] = useState<string>(""); // original input value, update input, initial value
   const [todos, setTodos] = useState<Todos[]>([]);
   const [open, setOpen] = useState<boolean>(false);
-  const [date, setDate] = useState<Date[]>([]);
-
-  const newDate = () => {
-      setDate([...date, new Date()]);
-  };
 
   const addTodo = () => {
     if (!input.trim()) return;
@@ -31,6 +27,7 @@ function App() {
       id: Date.now(),
       text: input, 
       completed: false,
+      date: new Date(),
     };
 
     setTodos((prevTodos) => [...prevTodos, newTodo]);
@@ -47,7 +44,13 @@ function App() {
       setTodos(todos.filter((todo) => todo.id !== id)); // filter out the id deleted 
   }
 
-
+  const updateTodo = (id: number, updateField: Partial<Todos>) => {
+      setTodos((prevTodos) => 
+          prevTodos.map((todo) => 
+            todo.id === id ? {...todo, ...updateField } : todo
+        )  
+      );
+  };
 
   return (
     <>
@@ -68,9 +71,9 @@ function App() {
             <h1 className="text-center text-white text-xl">To-Dos</h1>
               {todos.length > 0 ? (
                 <>{todos.map((todo) =>  {
-                  return <Todo key={todo.id} todo={todo} completeTodo = {completeTodo} deleteTodo = {deleteTodo}/>
+                  return <Todo key={todo.id} todo={todo} completeTodo = {completeTodo} deleteTodo = {deleteTodo} updateTodo={updateTodo}/>
               })}</>               
-              ): (<h1 className="text-center text-white text-xl font-bold my-2">You have completed all your tasks!</h1>) }
+              ): (<h1 className="text-center text-white text-xl font-bold my-2">You've completed all your tasks!</h1>) }
           </div>
         </div> 
       </div>
