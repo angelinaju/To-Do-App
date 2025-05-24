@@ -1,5 +1,5 @@
 import react from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaCheck, FaCheckCircle, FaTrash } from 'react-icons/fa';
 import { IoIosInformationCircle } from 'react-icons/io';
 import Modal from './Modal'
@@ -19,6 +19,16 @@ type TodoProp = {
 
 export default function Todo({todo, completeTodo, deleteTodo, updateTodo} : TodoProp) {
     const [open, setOpen] = useState<boolean>(false);
+    const [tempNote, setNote] = useState<string> (todo.notes || '');
+
+    useEffect(() => {
+        if (open) setNote(todo.notes || '');
+    }, [open, todo.notes]);
+
+    const saveNote = () => {
+        updateTodo(todo.id, {notes: tempNote});
+        setOpen(false);
+    };
 
     return (
         <div className="bg-blue-500 p-2 rounded-md flex justify-between items-center my-4 text-white">
@@ -31,10 +41,10 @@ export default function Todo({todo, completeTodo, deleteTodo, updateTodo} : Todo
                                 <p className= "text-black text-small">Created On: {new Date(todo.date).toLocaleString()}</p>
 
                                 <textarea className="p-2 border rounded text-black" 
-                                placeholder="Add notes..." value={todo.notes || ''} 
-                                onChange={(e) => updateTodo(todo.id, {notes: e.target.value})}></textarea>
+                                placeholder="Add notes..." value={tempNote} 
+                                onChange={(e) => setNote(e.target.value)}></textarea>
                                 <button className="mt-2 self-end bg-blue-600 text-white px-4 py-1 rounded hover:text-blue-600" 
-                                onClick={() => setOpen(false)}>Save</button>
+                                onClick={() => saveNote()}>Save</button>
                         </div>
                     </Modal>
                 <FaCheckCircle className="hover:text-gray-200" onClick={() => completeTodo(todo.id)}/> 
