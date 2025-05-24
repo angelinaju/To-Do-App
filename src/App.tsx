@@ -19,27 +19,27 @@ type Todos = {
 function App() {
 
   const [input, setInput] = useState<string>(""); // original input value, update input, initial value
-  const [todos, setTodos] = useState<Todos[]>(() => {
+  const [todos, setTodos] = useState<Todos[]>(() => { // run on render and avoid overwriting with an empty array
       const stored = localStorage.getItem("todos");
       if (!stored) return [];
 
       try {
-        const parsed = JSON.parse(stored);
+        const parsed = JSON.parse(stored);        // parse from string -> array of objects
         return parsed.map((todo: any) => ({
           ...todo, 
-          date: new Date(todo.date),
+          date: new Date(todo.date),              // convert date from string -> date object
         }))
       } catch {
         return [];
       }
   });
   
-  useEffect(() => {
+  useEffect(() => {                     // save the todos array to localStorage using useEffect
       localStorage.setItem('todos', JSON.stringify(todos));
   }, [todos]);
 
   const addTodo = () => {
-    if (!input.trim()) return;
+    if (!input.trim()) return;        // prevents addition of todos with just spaces
 
     const newTodo = {
       id: Date.now(),
@@ -48,11 +48,11 @@ function App() {
       date: new Date(),
     };
 
-    setTodos((prevTodos) => [...prevTodos, newTodo]);
+    setTodos((prevTodos) => [...prevTodos, newTodo]);     // add to array
     setInput("");
   };
 
-  const completeTodo = (id : number) => {
+  const completeTodo = (id : number) => {           // mark as complete or remark as incomplete
       setTodos(todos.map((todo) =>
           todo.id === id ? {...todo, completed: !todo.completed} : todo
       ))
@@ -62,7 +62,7 @@ function App() {
       setTodos(todos.filter((todo) => todo.id !== id)); // filter out the id deleted 
   }
 
-  const updateTodo = (id: number, updateField: Partial<Todos>) => {
+  const updateTodo = (id: number, updateField: Partial<Todos>) => {   // partial updates allows for just updating the notes section
       setTodos((prevTodos) => 
           prevTodos.map((todo) => 
             todo.id === id ? {...todo, ...updateField } : todo
