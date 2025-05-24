@@ -4,6 +4,8 @@ import { FaCheckCircle, FaTrash } from 'react-icons/fa'
 import { IoIosInformationCircle} from 'react-icons/io'
 import Todo from './Todo' 
 import Modal from './Modal'
+import { getItem } from './utils/localStorage'
+import type { DragEndEvent } from '@dnd-kit/core'
 
 
 type Todos = {
@@ -17,8 +19,24 @@ type Todos = {
 function App() {
 
   const [input, setInput] = useState<string>(""); // original input value, update input, initial value
-  const [todos, setTodos] = useState<Todos[]>([]);
-  const [open, setOpen] = useState<boolean>(false);
+  const [todos, setTodos] = useState<Todos[]>(() => {
+      const stored = localStorage.getItem("todos");
+      if (!stored) return [];
+
+      try {
+        const parsed = JSON.parse(stored);
+        return parsed.map((todo: any) => ({
+          ...todo, 
+          date: new Date(todo.date),
+        }))
+      } catch {
+        return [];
+      }
+  });
+  
+  useEffect(() => {
+      localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
 
   const addTodo = () => {
     if (!input.trim()) return;

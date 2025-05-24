@@ -14,7 +14,7 @@ type TodoProp = {
     };
     completeTodo: (id: number) => void;
     deleteTodo: (id: number) => void;
-    updateTodo: (id: number, updateField: Partial<TodoProp['todo']> ) => void;
+    updateTodo: (id: number, updateField: Partial<TodoProp['todo']> ) => void; //optional property to just update this field
 };
 
 export default function Todo({todo, completeTodo, deleteTodo, updateTodo} : TodoProp) {
