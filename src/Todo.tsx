@@ -21,11 +21,11 @@ export default function Todo({todo, completeTodo, deleteTodo, updateTodo} : Todo
     const [open, setOpen] = useState<boolean>(false);
     const [tempNote, setNote] = useState<string> (todo.notes || '');
 
-    useEffect(() => {
+    useEffect(() => {             // tempnote state holds draft and resets each time the pop-up opens
         if (open) setNote(todo.notes || '');
     }, [open, todo.notes]);
 
-    const saveNote = () => {
+    const saveNote = () => {      // only updates the todo with the temp note if save is clicked
         updateTodo(todo.id, {notes: tempNote});
         setOpen(false);
     };
@@ -37,8 +37,8 @@ export default function Todo({todo, completeTodo, deleteTodo, updateTodo} : Todo
                 <IoIosInformationCircle className="hover:text-gray-200 size-5" onClick={() => setOpen(true) }/>
                     <Modal open={open} onClose={() => setOpen(false)}>
                         <div className="flex flex-col gap-6 ">
-                                <h1 className="text-small text-black justify-left padding-right:4">{todo.text}</h1>
-                                <p className= "text-black text-small">Created On: {new Date(todo.date).toLocaleString()}</p>
+                                <h1 id="title" className="text-small text-black break-all padding-right:50px">{todo.text}</h1>
+                                <p className= "text-black text-small">Created: {new Date(todo.date).toLocaleString()}</p>
 
                                 <textarea className="p-2 border rounded text-black" 
                                 placeholder="Add notes..." value={tempNote} 
