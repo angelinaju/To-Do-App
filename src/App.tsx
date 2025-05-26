@@ -77,26 +77,27 @@ function App() {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
     <>
-      <div className='bg-blue-950 p-2 min-h-screen w-screen flex justify-center items-center'>
-        <div id="box" className='max-w-[650px] w-[90%] bg-slate-900 p-4 rounded-2xl shadow-md'>
-          <h1 className='text-center text-white text-2xl'>To-Do List</h1>
-          <div className='flex gap-2 justify-center my-8'>
+      <div className='bg-gradient-to-br from-blue-950 via-indigo-900 to-slate-900 min-h-screen w-screen flex justify-center items-start py-10 px-4'>
+        <div id="box" className='w-full max-w-3xl bg-slate-800 p-6 rounded-2xl shadow-2xl'>
+          <h1 className='text-white text-3xl font-semibold text-center mb-6'>My To-Do List</h1>
+          <div className='flex flex-col sm:flex-row gap-3 mb-6'>
             <input 
             value={input}
             onChange={(e) => setInput(e.target.value)}    
-            type="text" placeholder='Add Task' className= 'flex-3 border-2 outline-none border-blue-800 text-white placeholder-gray-500 p-2 rounded-md focus-border-white'/>
+            type="text" placeholder='Add Task' className= 'flex-grow bg-slate-700 text-white placeholder-gray-400 p-3 rounded-md focus:ring-blue-500 focus:outline-none'/>
             <button 
             onClick={() => {addTodo();}}
-            className="flex-1 bg-gray-1000 cursor-pointer rounded-md text-sm hover:bg-blue-800 text-white">Add Task</button>
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md transition">Add Task</button>
             
           </div>
           <div>
               {todos.length > 0 ? (
+                <div className="space-y-4">
                 <>{todos.map((todo) =>  {
                   return (
                     
                     <Todo key={todo.id} todo={todo} completeTodo = {completeTodo} deleteTodo = {deleteTodo} updateTodo={updateTodo}/>)
-              })}</>               
+              })}</> </div>              
               ): (<p className="text-center text-white text-bold text-xl my-2">You've completed all your tasks!</p>) }
           </div>
         </div> 
