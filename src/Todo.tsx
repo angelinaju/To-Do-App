@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { FaCheck, FaCheckCircle, FaTrash } from 'react-icons/fa';
 import { IoIosInformationCircle } from 'react-icons/io';
 import Modal from './Modal'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 type TodoProp = {
     todo: {
@@ -11,22 +13,28 @@ type TodoProp = {
         completed: boolean
         date: Date;
         notes?: string,
+        dueDate?: Date;
     };
     completeTodo: (id: number) => void;
     deleteTodo: (id: number) => void;
     updateTodo: (id: number, updateField: Partial<TodoProp['todo']> ) => void; //optional property to just update this field
+    //updateDueDate: (id: number, updateField: Partial<TodoProp['todo']> ) => void;
 };
 
 export default function Todo({todo, completeTodo, deleteTodo, updateTodo} : TodoProp) {
     const [open, setOpen] = useState<boolean>(false);
     const [tempNote, setNote] = useState<string> (todo.notes || '');
+    const [tempDueDate, setDueDate] = useState<Date | null>(todo.dueDate || null);
 
     useEffect(() => {             // tempnote state holds draft and resets each time the pop-up opens
-        if (open) setNote(todo.notes || '');
-    }, [open, todo.notes]);
+        if (open) {
+            setNote(todo.notes || '');
+            setDueDate(todo.dueDate || null);
+        }
+    }, [open, todo.notes, todo.dueDate]);
 
-    const saveNote = () => {      // only updates the todo with the temp note if save is clicked
-        updateTodo(todo.id, {notes: tempNote});
+    const saveFields = () => {      // only updates the todo with the temp note if save is clicked
+        updateTodo(todo.id, {notes: tempNote, dueDate: tempDueDate ?? undefined });
         setOpen(false);
     };
 
@@ -40,11 +48,13 @@ export default function Todo({todo, completeTodo, deleteTodo, updateTodo} : Todo
                                 <h1 id="title" className="text-small text-black break-words padding-right:50px">{todo.text}</h1>
                                 <p className= "text-black text-small">Created: {new Date(todo.date).toLocaleString()}</p>
 
+                                <DatePicker label="Due Date" value={tempDueDate} onChange={(newValue) => setDueDate(newValue)} />
+                        
                                 <textarea className="p-2 border rounded text-black" 
                                 placeholder="Add notes..." value={tempNote} 
                                 onChange={(e) => setNote(e.target.value)}></textarea>
                                 <button className="mt-2 self-end bg-blue-600 text-white px-4 py-1 rounded-xl hover:text-blue-300" 
-                                onClick={() => saveNote()}>Save</button>
+                                onClick={() => saveFields()}>Save</button>
                         </div>
                     </Modal>
                 <FaCheckCircle className="hover:text-gray-200" onClick={() => completeTodo(todo.id)}/> 

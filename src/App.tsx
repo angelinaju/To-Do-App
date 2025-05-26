@@ -6,6 +6,8 @@ import Todo from './Todo'
 import Modal from './Modal'
 import { getItem } from './utils/localStorage'
 import type { DragEndEvent } from '@dnd-kit/core'
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 
 type Todos = {
@@ -14,6 +16,7 @@ type Todos = {
   completed: boolean,
   date: Date;
   notes?: string, 
+  dueDate?: Date;
 }
 
 function App() {
@@ -28,6 +31,7 @@ function App() {
         return parsed.map((todo: any) => ({
           ...todo, 
           date: new Date(todo.date),              // convert date from string -> date object
+          dueDate: todo.dueDate ? new Date(todo.dueDate) : undefined,
         }))
       } catch {
         return [];
@@ -71,6 +75,7 @@ function App() {
   };
 
   return (
+    <LocalizationProvider dateAdapter={AdapterDateFns}>
     <>
       <div className='bg-blue-950 p-2 min-h-screen w-screen flex justify-center items-center'>
         <div id="box" className='max-w-[650px] w-[90%] bg-slate-900 p-4 rounded-2xl shadow-md'>
@@ -88,7 +93,9 @@ function App() {
           <div>
               {todos.length > 0 ? (
                 <>{todos.map((todo) =>  {
-                  return <Todo key={todo.id} todo={todo} completeTodo = {completeTodo} deleteTodo = {deleteTodo} updateTodo={updateTodo}/>
+                  return (
+                    
+                    <Todo key={todo.id} todo={todo} completeTodo = {completeTodo} deleteTodo = {deleteTodo} updateTodo={updateTodo}/>)
               })}</>               
               ): (<p className="text-center text-white text-bold text-xl my-2">You've completed all your tasks!</p>) }
           </div>
@@ -96,6 +103,7 @@ function App() {
         {/* <div id="box" className="max-w-[650px] w-[90%] bg-slate-900 p-4 rounded-lg shadow-md"></div> */}
       </div>
     </>
+    </LocalizationProvider>
   )
 }
 
