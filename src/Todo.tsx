@@ -31,19 +31,19 @@ export default function Todo({todo, completeTodo, deleteTodo, updateTodo} : Todo
     };
 
     return (
-        <div className="bg-blue-500 p-2 rounded-md flex justify-between items-center my-4 text-white">
+        <div id="todoElement" className="bg-blue-500 p-2 rounded-md flex justify-between items-center my-4 text-white">
             <p className = {`${todo.completed === true ? 'line-through' : ""}`}>{todo.text}</p>
             <div className="flex item-center gap-2 cursor-pointer items-center">
                 <IoIosInformationCircle className="hover:text-gray-200 size-5" onClick={() => setOpen(true) }/>
                     <Modal open={open} onClose={() => setOpen(false)}>
                         <div className="flex flex-col gap-6 ">
-                                <h1 id="title" className="text-small text-black break-all padding-right:50px">{todo.text}</h1>
+                                <h1 id="title" className="text-small text-black break-words padding-right:50px">{todo.text}</h1>
                                 <p className= "text-black text-small">Created: {new Date(todo.date).toLocaleString()}</p>
 
                                 <textarea className="p-2 border rounded text-black" 
                                 placeholder="Add notes..." value={tempNote} 
                                 onChange={(e) => setNote(e.target.value)}></textarea>
-                                <button className="mt-2 self-end bg-blue-600 text-white px-4 py-1 rounded hover:text-blue-600" 
+                                <button className="mt-2 self-end bg-blue-600 text-white px-4 py-1 rounded-xl hover:text-blue-300" 
                                 onClick={() => saveNote()}>Save</button>
                         </div>
                     </Modal>

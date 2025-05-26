@@ -73,27 +73,27 @@ function App() {
   return (
     <>
       <div className='bg-blue-950 p-2 min-h-screen w-screen flex justify-center items-center'>
-        <div className='max-w-[500px] w-[90%] bg-slate-900 p-4 rounded-md shadow-md'>
+        <div id="box" className='max-w-[650px] w-[90%] bg-slate-900 p-4 rounded-2xl shadow-md'>
           <h1 className='text-center text-white text-2xl'>To-Do List</h1>
           <div className='flex gap-2 justify-center my-8'>
             <input 
             value={input}
             onChange={(e) => setInput(e.target.value)}    
-            type="text" placeholder='Add To-do' className= 'flex-3 border-2 outline-none border-gray-500 text-white placeholder-gray-500 p-2 rounded-md focus-border-white'/>
+            type="text" placeholder='Add Task' className= 'flex-3 border-2 outline-none border-blue-800 text-white placeholder-gray-500 p-2 rounded-md focus-border-white'/>
             <button 
             onClick={() => {addTodo();}}
-            className="flex-1 bg-gray-1000 cursor-pointer rounded-md text-sm hover:bg-purple-900 text-white">Add Task</button>
+            className="flex-1 bg-gray-1000 cursor-pointer rounded-md text-sm hover:bg-blue-800 text-white">Add Task</button>
             
           </div>
           <div>
-            <h1 className="text-center text-white text-xl">To-Dos</h1>
               {todos.length > 0 ? (
                 <>{todos.map((todo) =>  {
                   return <Todo key={todo.id} todo={todo} completeTodo = {completeTodo} deleteTodo = {deleteTodo} updateTodo={updateTodo}/>
               })}</>               
-              ): (<h1 className="text-center text-white text-xl font-bold my-2">You've completed all your tasks!</h1>) }
+              ): (<p className="text-center text-white text-bold text-xl my-2">You've completed all your tasks!</p>) }
           </div>
         </div> 
+        {/* <div id="box" className="max-w-[650px] w-[90%] bg-slate-900 p-4 rounded-lg shadow-md"></div> */}
       </div>
     </>
   )
