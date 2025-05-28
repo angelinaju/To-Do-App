@@ -5,9 +5,13 @@ import { IoIosInformationCircle} from 'react-icons/io'
 import Todo from './Todo' 
 import Modal from './Modal'
 import { getItem } from './utils/localStorage'
-import type { DragEndEvent } from '@dnd-kit/core'
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { DndContext, closestCenter, type DragEndEvent } from '@dnd-kit/core';
+import { de } from 'date-fns/locale'
+import { itemsEqual } from '@dnd-kit/sortable/dist/utilities'
+
 
 
 type Todos = {
@@ -74,7 +78,20 @@ function App() {
       );
   };
 
+  const handleDragEnd = (event: DragEndEvent) => {
+      const { active, over } = event;
+
+      if (!over || active.id === over.id) return;
+
+      const oldIdx = todos.findIndex(todo => todo.id === active.id);
+      const newIdx = todos.findIndex(todo => todo.id === over.id);
+
+      setTodos((prev) => arrayMove(prev, oldIdx, newIdx));
+  }
+
+
   return (
+  
     <LocalizationProvider dateAdapter={AdapterDateFns}>
     <>
       <div className='bg-gradient-to-br from-blue-950 via-indigo-900 to-slate-900 min-h-screen w-screen flex justify-center items-start py-10 px-4'>
@@ -90,18 +107,27 @@ function App() {
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md transition">Add Task</button>
             
           </div>
-          <div>
-              {todos.length > 0 ? (
-                <div className="space-y-4">
-                <>{todos.map((todo) =>  {
-                  return (
-                    
-                    <Todo key={todo.id} todo={todo} completeTodo = {completeTodo} deleteTodo = {deleteTodo} updateTodo={updateTodo}/>)
-              })}</> </div>              
-              ): (<p className="text-center text-white text-bold text-xl my-2">You've completed all your tasks!</p>) }
-          </div>
+          {/* <div>
+            {todos.length > 0 ? (
+              <div className="space-y-4">
+                {todos.map((todo) => (
+                    <Todo key={todo.id} todo={todo} completeTodo={completeTodo} deleteTodo={deleteTodo} updateTodo={updateTodo}></Todo>
+                ))}
+              </div>
+            ): (
+              <p className="text-center text-white font-bold text-xl my-2">You've completed all your tasks!</p>
+            )}
+          </div> */}
+          <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+            <SortableContext items={todos.map((todo) => todo.id)} strategy={verticalListSortingStrategy}>
+              <div className="space-y-4">
+                  {todos.map((todo) => (
+                      <Todo key={todo.id} todo={todo} completeTodo={completeTodo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
+                  ))}
+              </div>
+            </SortableContext>
+          </DndContext>
         </div> 
-        {/* <div id="box" className="max-w-[650px] w-[90%] bg-slate-900 p-4 rounded-lg shadow-md"></div> */}
       </div>
     </>
     </LocalizationProvider>

@@ -5,6 +5,9 @@ import { IoIosInformationCircle } from 'react-icons/io';
 import Modal from './Modal'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { CSS } from '@dnd-kit/utilities'
+import { useSortable } from '@dnd-kit/sortable'
+import { FaGripVertical } from 'react-icons/fa'
 
 type TodoProp = {
     todo: {
@@ -37,11 +40,26 @@ export default function Todo({todo, completeTodo, deleteTodo, updateTodo} : Todo
         setOpen(false);
     };
 
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+    } = useSortable({ id: todo.id });
+    
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+    };
+
     return (
-        <div id="todoElement" className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 rounded-xl flex justify-between items-center my-4 text-white shadow-md">
-            <p className = {`flex-1 ${todo.completed === true ? 'line-through text-gray-500' : "font-medium"}`}>{todo.text}</p>
+        <div id="todoElement" ref={setNodeRef} style={style} {...attributes}
+        className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 rounded-xl flex justify-between items-center my-4 text-white shadow-md">
+            <h2 className = {`flex-1 ${todo.completed === true ? 'line-through text-gray-500' : "font-medium"}`}>{todo.text}</h2>
             <div className="flex item-center gap-3 items-center">
-                <IoIosInformationCircle className="hover:text-blue-200 cursor-pointer text-lg" onClick={() => setOpen(true) }/>
+                <FaGripVertical {...listeners} className="cursor-grab active:cursor-grabbing text-white hover:text-gray-200 size-6" />
+                <IoIosInformationCircle className="hover:text-blue-200 cursor-pointer text-lg size-8" onClick={() => setOpen(true) }/>
                     <Modal open={open} onClose={() => setOpen(false)}>
                         <div className="flex flex-col gap-4 ">
                                 <h1 id="title" className="text-lg font-semibold text-blue-800 break-words">{todo.text}</h1>
@@ -56,8 +74,8 @@ export default function Todo({todo, completeTodo, deleteTodo, updateTodo} : Todo
                                 onClick={() => saveFields()}>Save</button>
                         </div>
                     </Modal>
-                <FaCheckCircle className="hover:text-green-300 cursor-pointer" onClick={() => completeTodo(todo.id)}/> 
-                <FaTrash className="hover:text-red-300 cursor-pointer" onClick={() => deleteTodo(todo.id)} />
+                <FaCheckCircle className="hover:text-green-300 cursor-pointer size-7" onClick={() => completeTodo(todo.id)}/> 
+                <FaTrash className="hover:text-red-300 cursor-pointer size-7" onClick={() => deleteTodo(todo.id)} />
             </div>
         </div>
     )
