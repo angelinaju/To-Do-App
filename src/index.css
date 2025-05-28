@@ -39,14 +39,6 @@ h1 {
    margin-top: 12px;
 }
 
-#box {
-   box-shadow: 0px -3px 40px 3px rgba(59, 130, 246, 0.15);
-}
-
-#todoElement {
-    box-shadow: 0px -3px 1px 3px rgba(59, 130, 246, 0.5);
-}
-
 button {
   border-radius: 8px;
   border: 1px solid transparent;

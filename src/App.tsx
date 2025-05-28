@@ -1,18 +1,13 @@
 import { useEffect, useState, useRef } from 'react'
 import './App.css'
-import { FaCheckCircle, FaTrash } from 'react-icons/fa'
-import { IoIosInformationCircle} from 'react-icons/io'
 import Todo from './Todo' 
 import Modal from './Modal'
-import { getItem } from './utils/localStorage'
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { DndContext, closestCenter, type DragEndEvent } from '@dnd-kit/core';
 import { de } from 'date-fns/locale'
 import { itemsEqual } from '@dnd-kit/sortable/dist/utilities'
-
-
 
 type Todos = {
   id: number, 
@@ -79,23 +74,22 @@ function App() {
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
-      const { active, over } = event;
+      const { active, over } = event;             // item that is dragged, item dropped over
 
       if (!over || active.id === over.id) return;
 
-      const oldIdx = todos.findIndex(todo => todo.id === active.id);
+      const oldIdx = todos.findIndex(todo => todo.id === active.id);  // find indices of dragged item and target item
       const newIdx = todos.findIndex(todo => todo.id === over.id);
 
-      setTodos((prev) => arrayMove(prev, oldIdx, newIdx));
+      setTodos((prev) => arrayMove(prev, oldIdx, newIdx));    // create new array with item moved
   }
-
 
   return (
   
     <LocalizationProvider dateAdapter={AdapterDateFns}>
     <>
       <div className='bg-gradient-to-br from-blue-950 via-indigo-900 to-slate-900 min-h-screen w-screen flex justify-center items-start py-10 px-4'>
-        <div id="box" className='w-full max-w-3xl bg-slate-800 p-6 rounded-2xl shadow-2xl'>
+        <div className='w-full max-w-3xl bg-slate-800 p-6 rounded-2xl shadow-2xl'>
           <h1 className='text-white text-3xl font-semibold text-center mb-6'>My To-Do List</h1>
           <div className='flex flex-col sm:flex-row gap-3 mb-6'>
             <input 

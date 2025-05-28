@@ -1,13 +1,12 @@
 import react from 'react';
 import { useState, useEffect } from 'react';
-import { FaCheck, FaCheckCircle, FaTrash } from 'react-icons/fa';
+import { FaCheck, FaCheckCircle, FaTrash, FaGripVertical } from 'react-icons/fa';
 import { IoIosInformationCircle } from 'react-icons/io';
 import Modal from './Modal'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { CSS } from '@dnd-kit/utilities'
 import { useSortable } from '@dnd-kit/sortable'
-import { FaGripVertical } from 'react-icons/fa'
 
 type TodoProp = {
     todo: {
@@ -28,7 +27,7 @@ export default function Todo({todo, completeTodo, deleteTodo, updateTodo} : Todo
     const [tempNote, setNote] = useState<string> (todo.notes || '');
     const [tempDueDate, setDueDate] = useState<Date | null>(todo.dueDate || null);
 
-    useEffect(() => {             // tempnote state holds draft and resets each time the pop-up opens
+    useEffect(() => {             // tempnote state resets each time the pop-up opens
         if (open) {
             setNote(todo.notes || '');
             setDueDate(todo.dueDate || null);
@@ -40,7 +39,7 @@ export default function Todo({todo, completeTodo, deleteTodo, updateTodo} : Todo
         setOpen(false);
     };
 
-    const {
+    const {             // drag & drop library
         attributes,
         listeners,
         setNodeRef,
@@ -54,7 +53,7 @@ export default function Todo({todo, completeTodo, deleteTodo, updateTodo} : Todo
     };
 
     return (
-        <div id="todoElement" ref={setNodeRef} style={style} {...attributes}
+        <div ref={setNodeRef} style={style} {...attributes}
         className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 rounded-xl flex justify-between items-center my-4 text-white shadow-md">
             <h2 className = {`flex-1 ${todo.completed === true ? 'line-through text-gray-500' : "font-medium"}`}>{todo.text}</h2>
             <div className="flex item-center gap-3 items-center">

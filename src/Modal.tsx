@@ -3,7 +3,7 @@
 type propTypes = {
     open: boolean;
     onClose: () => void;
-    children: React.ReactNode;
+    children: React.ReactNode;           // react content rendered inside modal
 }
 
 const Modal: React.FC<propTypes> = ({open, onClose, children}) => {  
