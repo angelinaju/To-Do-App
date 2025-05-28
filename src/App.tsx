@@ -107,23 +107,14 @@ function App() {
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md transition">Add Task</button>
             
           </div>
-          {/* <div>
-            {todos.length > 0 ? (
-              <div className="space-y-4">
-                {todos.map((todo) => (
-                    <Todo key={todo.id} todo={todo} completeTodo={completeTodo} deleteTodo={deleteTodo} updateTodo={updateTodo}></Todo>
-                ))}
-              </div>
-            ): (
-              <p className="text-center text-white font-bold text-xl my-2">You've completed all your tasks!</p>
-            )}
-          </div> */}
           <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={todos.map((todo) => todo.id)} strategy={verticalListSortingStrategy}>
               <div className="space-y-4">
-                  {todos.map((todo) => (
+                  {todos.length > 0 ? (
+                    todos.map((todo) => (
                       <Todo key={todo.id} todo={todo} completeTodo={completeTodo} deleteTodo={deleteTodo} updateTodo={updateTodo} />
-                  ))}
+                    ))
+                  ) : <p className="text-center text-white text-bold text-xl my-2">You've completed all your tasks!</p>}
               </div>
             </SortableContext>
           </DndContext>
